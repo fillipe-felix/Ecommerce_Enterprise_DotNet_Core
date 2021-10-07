@@ -39,9 +39,10 @@ namespace EE.Identidade.API
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
             
-            //suporte ao identity
+            //suporte e configurações do identity
             services.AddDefaultIdentity<IdentityUser>()
                 .AddRoles<IdentityRole>()
+                .AddErrorDescriber<IdentityMensagensPortugues>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
             
