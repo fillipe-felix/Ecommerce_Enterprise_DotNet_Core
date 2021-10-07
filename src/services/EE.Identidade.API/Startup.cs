@@ -44,7 +44,12 @@ namespace EE.Identidade.API
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "EE.Identidade.API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "Ecommerce Enterprise Identity API",
+                    Description = "Esta API faz o cadastro e autenticação de usuarios",
+                    Version = "v1"
+                });
             });
         }
 

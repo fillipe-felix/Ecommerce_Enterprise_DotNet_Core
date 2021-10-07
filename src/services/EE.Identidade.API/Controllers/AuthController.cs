@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EE.Identidade.API.Controllers
 {
     [Route("api/identidade")]
+    [ApiController]
     public class AuthController : Controller
     {
         private readonly SignInManager<IdentityUser> _signInManager;
