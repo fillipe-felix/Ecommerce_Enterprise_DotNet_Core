@@ -1,11 +1,20 @@
 ﻿using System.Threading.Tasks;
 using EE.WebApp.MVC.Models;
+using EE.WebApp.MVC.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EE.WebApp.MVC.Controllers
 {
     public class IdentidadeController : Controller
     {
+
+        private readonly IAutenticacaoService _autenticacaoService;
+
+        public IdentidadeController(IAutenticacaoService autenticacaoService)
+        {
+            _autenticacaoService = autenticacaoService;
+        }
+
         [HttpGet]
         [Route("nova-conta")]
         public IActionResult Registro()
@@ -23,6 +32,8 @@ namespace EE.WebApp.MVC.Controllers
             }
             
             // API - Registro
+            var resposta = await _autenticacaoService.Registro(usuarioRegistro);
+            
             if (false)
             {
                 return  View(usuarioRegistro);
@@ -49,6 +60,8 @@ namespace EE.WebApp.MVC.Controllers
             }
             
             // API - Login
+            var resposta = await _autenticacaoService.Login(usuarioLogin);
+            
             if (false)
             {
                 return  View(usuarioLogin);

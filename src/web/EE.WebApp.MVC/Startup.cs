@@ -28,6 +28,9 @@ namespace EE.WebApp.MVC
             services.AddIdentityConfugation();
 
             services.AddMvcConfiguration();
+
+            // adiciona configurações de injeção de dependencia de services
+            services.RegisterServices();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
