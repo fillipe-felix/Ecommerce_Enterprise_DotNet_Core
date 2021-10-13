@@ -3,7 +3,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using EE.WebApp.MVC.Models;
-using Microsoft.AspNetCore.Mvc.Formatters;
+
 
 namespace EE.WebApp.MVC.Services
 {
@@ -16,7 +16,7 @@ namespace EE.WebApp.MVC.Services
             _httpClient = httpClient;
         }
 
-        public async Task<string> Login(UsuarioLogin usuarioLogin)
+        public async Task<UsuarioRespostaLogin> Login(UsuarioLogin usuarioLogin)
         {
             var loginContent = new StringContent(
                 JsonSerializer.Serialize(usuarioLogin),
@@ -27,10 +27,16 @@ namespace EE.WebApp.MVC.Services
 
             var teste = await response.Content.ReadAsStringAsync();
 
-            return JsonSerializer.Deserialize<string>(await response.Content.ReadAsStringAsync());
+            //usado para que ignore o case sensitive dos atributos das classes e consiga desseralizar o objeto corretamente
+            var options = new JsonSerializerOptions()
+            {
+                PropertyNameCaseInsensitive = true
+            };
+
+            return JsonSerializer.Deserialize<UsuarioRespostaLogin>(await response.Content.ReadAsStringAsync(), options);
         }
 
-        public async Task<string> Registro(UsuarioRegistro usuarioRegistro)
+        public async Task<UsuarioRespostaLogin> Registro(UsuarioRegistro usuarioRegistro)
         {
             var registroContent = new StringContent(
                 JsonSerializer.Serialize(usuarioRegistro),
@@ -39,7 +45,7 @@ namespace EE.WebApp.MVC.Services
 
             var response = await _httpClient.PostAsync("https://localhost:44356/api/identidade/nova-conta", registroContent);
 
-            return JsonSerializer.Deserialize<string>(await response.Content.ReadAsStringAsync());
+            return JsonSerializer.Deserialize<UsuarioRespostaLogin>(await response.Content.ReadAsStringAsync());
         }
     }
 }
