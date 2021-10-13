@@ -9,7 +9,8 @@ namespace EE.WebApp.MVC.Configuration
     {
         public static void AddMvcConfiguration(this IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            services.AddControllersWithViews()
+                .AddRazorRuntimeCompilation();
         }
 
         public static void UseMvcConfiguraion(this IApplicationBuilder app, IWebHostEnvironment env)
