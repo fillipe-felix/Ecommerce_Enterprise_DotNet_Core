@@ -12,7 +12,7 @@ using Claim = System.Security.Claims.Claim;
 
 namespace EE.WebApp.MVC.Controllers
 {
-    public class IdentidadeController : Controller
+    public class IdentidadeController : MainController
     {
 
         private readonly IAutenticacaoService _autenticacaoService;
@@ -50,8 +50,8 @@ namespace EE.WebApp.MVC.Controllers
             
             // API - Registro
             var resposta = await _autenticacaoService.Registro(usuarioRegistro);
-            
-            if (false)
+
+            if (ResponsePossuiErros(resposta.ResponseResult))
             {
                 return  View(usuarioRegistro);
             }
@@ -90,7 +90,7 @@ namespace EE.WebApp.MVC.Controllers
             // API - Login
             var resposta = await _autenticacaoService.Login(usuarioLogin);
             
-            if (false)
+            if (ResponsePossuiErros(resposta.ResponseResult))
             {
                 return  View(usuarioLogin);
             }

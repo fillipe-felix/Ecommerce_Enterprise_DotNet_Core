@@ -37,6 +37,8 @@ namespace EE.WebApp.MVC.Models
         public double ExpiresIn { get; set; }
         
         public UsuarioToken UsuarioToken { get; set; }
+        
+        public ResponseResult ResponseResult { get; set; }
     }
 
     public class UsuarioToken

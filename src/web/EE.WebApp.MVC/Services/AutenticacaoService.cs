@@ -7,7 +7,7 @@ using EE.WebApp.MVC.Models;
 
 namespace EE.WebApp.MVC.Services
 {
-    public class AutenticacaoService : IAutenticacaoService
+    public class AutenticacaoService : Service, IAutenticacaoService
     {
         private readonly HttpClient _httpClient;
 
@@ -25,14 +25,21 @@ namespace EE.WebApp.MVC.Services
 
             var response = await _httpClient.PostAsync("https://localhost:44356/api/identidade/autenticar", loginContent);
 
-            var teste = await response.Content.ReadAsStringAsync();
-
             //usado para que ignore o case sensitive dos atributos das classes e consiga desseralizar o objeto corretamente
             var options = new JsonSerializerOptions()
             {
                 PropertyNameCaseInsensitive = true
             };
-
+            
+            if (!TratarErrosResponse(response))
+            {
+                return new UsuarioRespostaLogin
+                {
+                    ResponseResult =
+                        JsonSerializer.Deserialize<ResponseResult>(await response.Content.ReadAsStringAsync(), options)
+                };
+            }
+            
             return JsonSerializer.Deserialize<UsuarioRespostaLogin>(await response.Content.ReadAsStringAsync(), options);
         }
 
@@ -44,8 +51,23 @@ namespace EE.WebApp.MVC.Services
                 "application/json");
 
             var response = await _httpClient.PostAsync("https://localhost:44356/api/identidade/nova-conta", registroContent);
+            
+            //usado para que ignore o case sensitive dos atributos das classes e consiga desseralizar o objeto corretamente
+            var options = new JsonSerializerOptions()
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            
+            if (!TratarErrosResponse(response))
+            {
+                return new UsuarioRespostaLogin
+                {
+                    ResponseResult =
+                        JsonSerializer.Deserialize<ResponseResult>(await response.Content.ReadAsStringAsync(), options)
+                };
+            }
 
-            return JsonSerializer.Deserialize<UsuarioRespostaLogin>(await response.Content.ReadAsStringAsync());
+            return JsonSerializer.Deserialize<UsuarioRespostaLogin>(await response.Content.ReadAsStringAsync(), options);
         }
     }
 }
