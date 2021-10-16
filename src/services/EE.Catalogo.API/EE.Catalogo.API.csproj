@@ -12,7 +12,10 @@
     <ItemGroup>
       <Folder Include="Controllers" />
       <Folder Include="Data" />
-      <Folder Include="Models" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\building blocks\EE.Core\EE.Core.csproj" />
     </ItemGroup>
 
 </Project>
