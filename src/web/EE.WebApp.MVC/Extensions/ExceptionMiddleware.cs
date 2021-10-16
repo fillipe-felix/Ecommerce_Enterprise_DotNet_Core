@@ -39,7 +39,7 @@ namespace EE.WebApp.MVC.Extensions
         {
             if (customHttpResquestException.StatusCode == HttpStatusCode.Unauthorized)
             {
-                httpContext.Response.Redirect("/login");
+                httpContext.Response.Redirect($"/login?ReturnUrl={httpContext.Request.Path}");
                 return;
             }
 

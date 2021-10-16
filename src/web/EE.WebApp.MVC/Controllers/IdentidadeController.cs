@@ -68,8 +68,9 @@ namespace EE.WebApp.MVC.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("login")]
-        public IActionResult Login()
+        public IActionResult Login(string returnUrl = null)
         {
+            ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
 
@@ -80,8 +81,9 @@ namespace EE.WebApp.MVC.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login(UsuarioLogin usuarioLogin)
+        public async Task<IActionResult> Login(UsuarioLogin usuarioLogin, string returnUrl = null)
         {
+            ViewData["ReturnUrl"] = returnUrl;
             if (!ModelState.IsValid)
             {
                 return View(usuarioLogin);
@@ -97,8 +99,13 @@ namespace EE.WebApp.MVC.Controllers
 
             // Realizar Login na APP
             await RealizarLogin(resposta);
+
+            if (string.IsNullOrEmpty(returnUrl))
+            {
+                return RedirectToAction("Index", "Home");
+            }
             
-            return RedirectToAction("Index", "Home");
+            return LocalRedirect(returnUrl);
         }
 
         /// <summary>
