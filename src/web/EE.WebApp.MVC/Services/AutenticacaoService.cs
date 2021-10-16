@@ -1,6 +1,9 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
+using EE.WebApp.MVC.Extensions;
 using EE.WebApp.MVC.Models;
+using Microsoft.Extensions.Options;
 
 
 namespace EE.WebApp.MVC.Services
@@ -9,8 +12,9 @@ namespace EE.WebApp.MVC.Services
     {
         private readonly HttpClient _httpClient;
 
-        public AutenticacaoService(HttpClient httpClient)
+        public AutenticacaoService(HttpClient httpClient, IOptions<AppSettings> settings)
         {
+            httpClient.BaseAddress = new Uri(settings.Value.AutenticacaoUrl);
             _httpClient = httpClient;
         }
 
@@ -18,7 +22,7 @@ namespace EE.WebApp.MVC.Services
         {
             var loginContent = ObterConteudo(usuarioLogin);
 
-            var response = await _httpClient.PostAsync("https://localhost:44356/api/identidade/autenticar", loginContent);
+            var response = await _httpClient.PostAsync("/api/identidade/autenticar", loginContent);
 
             if (!TratarErrosResponse(response))
             {
@@ -35,7 +39,7 @@ namespace EE.WebApp.MVC.Services
         {
             var registroContent = ObterConteudo(usuarioRegistro);
 
-            var response = await _httpClient.PostAsync("https://localhost:44356/api/identidade/nova-conta", registroContent);
+            var response = await _httpClient.PostAsync("/api/identidade/nova-conta", registroContent);
 
             if (!TratarErrosResponse(response))
             {

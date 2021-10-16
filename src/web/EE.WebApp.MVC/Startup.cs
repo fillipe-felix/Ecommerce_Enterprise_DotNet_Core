@@ -14,9 +14,18 @@ namespace EE.WebApp.MVC
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IHostEnvironment hostEnvironment)
         {
-            Configuration = configuration;
+            //faz a configuração de diferentes ambientes de desenvolvimento
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(hostEnvironment.ContentRootPath)
+                .AddJsonFile("appsettings.json", true, true)
+                .AddJsonFile($"appsettings.{hostEnvironment.EnvironmentName}.json", true, true)
+                .AddEnvironmentVariables();
+
+            if (hostEnvironment.IsDevelopment()) builder.AddUserSecrets<Startup>();
+
+            Configuration = builder.Build();
         }
 
         public IConfiguration Configuration { get; }
@@ -27,7 +36,7 @@ namespace EE.WebApp.MVC
             //adiciona as configurações do Identity
             services.AddIdentityConfugation();
 
-            services.AddMvcConfiguration();
+            services.AddMvcConfiguration(Configuration);
 
             // adiciona configurações de injeção de dependencia de services
             services.RegisterServices();
