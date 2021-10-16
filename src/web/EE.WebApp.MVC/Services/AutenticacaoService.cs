@@ -1,6 +1,4 @@
 ﻿using System.Net.Http;
-using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 using EE.WebApp.MVC.Models;
 
@@ -18,56 +16,36 @@ namespace EE.WebApp.MVC.Services
 
         public async Task<UsuarioRespostaLogin> Login(UsuarioLogin usuarioLogin)
         {
-            var loginContent = new StringContent(
-                JsonSerializer.Serialize(usuarioLogin),
-                Encoding.UTF8,
-                "application/json");
+            var loginContent = ObterConteudo(usuarioLogin);
 
             var response = await _httpClient.PostAsync("https://localhost:44356/api/identidade/autenticar", loginContent);
 
-            //usado para que ignore o case sensitive dos atributos das classes e consiga desseralizar o objeto corretamente
-            var options = new JsonSerializerOptions()
-            {
-                PropertyNameCaseInsensitive = true
-            };
-            
             if (!TratarErrosResponse(response))
             {
                 return new UsuarioRespostaLogin
                 {
-                    ResponseResult =
-                        JsonSerializer.Deserialize<ResponseResult>(await response.Content.ReadAsStringAsync(), options)
+                    ResponseResult = await DesserializarObjetoResponse<ResponseResult>(response)
                 };
             }
             
-            return JsonSerializer.Deserialize<UsuarioRespostaLogin>(await response.Content.ReadAsStringAsync(), options);
+            return await DesserializarObjetoResponse<UsuarioRespostaLogin>(response);
         }
 
         public async Task<UsuarioRespostaLogin> Registro(UsuarioRegistro usuarioRegistro)
         {
-            var registroContent = new StringContent(
-                JsonSerializer.Serialize(usuarioRegistro),
-                Encoding.UTF8,
-                "application/json");
+            var registroContent = ObterConteudo(usuarioRegistro);
 
             var response = await _httpClient.PostAsync("https://localhost:44356/api/identidade/nova-conta", registroContent);
-            
-            //usado para que ignore o case sensitive dos atributos das classes e consiga desseralizar o objeto corretamente
-            var options = new JsonSerializerOptions()
-            {
-                PropertyNameCaseInsensitive = true
-            };
-            
+
             if (!TratarErrosResponse(response))
             {
                 return new UsuarioRespostaLogin
                 {
-                    ResponseResult =
-                        JsonSerializer.Deserialize<ResponseResult>(await response.Content.ReadAsStringAsync(), options)
+                    ResponseResult = await DesserializarObjetoResponse<ResponseResult>(response)
                 };
             }
 
-            return JsonSerializer.Deserialize<UsuarioRespostaLogin>(await response.Content.ReadAsStringAsync(), options);
+            return await DesserializarObjetoResponse<UsuarioRespostaLogin>(response);
         }
     }
 }
