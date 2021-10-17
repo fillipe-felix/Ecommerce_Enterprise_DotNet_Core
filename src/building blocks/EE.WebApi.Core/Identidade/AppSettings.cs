@@ -1,4 +1,4 @@
-﻿namespace EE.Identidade.API.Extensions
+﻿namespace EE.WebApi.Core.Identidade
 {
     public class AppSettings
     {

@@ -21,6 +21,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\building blocks\EE.Core\EE.Core.csproj" />
+      <ProjectReference Include="..\..\building blocks\EE.WebApi.Core\EE.WebApi.Core.csproj" />
     </ItemGroup>
 
 </Project>
