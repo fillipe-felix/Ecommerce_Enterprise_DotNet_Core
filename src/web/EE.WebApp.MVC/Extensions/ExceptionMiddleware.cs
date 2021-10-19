@@ -2,6 +2,7 @@
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Refit;
 
 namespace EE.WebApp.MVC.Extensions
 {
@@ -26,7 +27,15 @@ namespace EE.WebApp.MVC.Extensions
             }
             catch (CustomHttpResquestException ex)
             {
-                HandleRequestExceptionAsync(httpContext, ex);
+                HandleRequestExceptionAsync(httpContext, ex.StatusCode);
+            }
+            catch (ValidationApiException ex)
+            {
+                HandleRequestExceptionAsync(httpContext, ex.StatusCode);
+            }
+            catch (ApiException ex)
+            {
+                HandleRequestExceptionAsync(httpContext, ex.StatusCode);
             }
         }
 
@@ -34,16 +43,16 @@ namespace EE.WebApp.MVC.Extensions
         /// Verifica o statusCode do erro e faz uma verificação
         /// </summary>
         /// <param name="httpContext"></param>
-        /// <param name="customHttpResquestException"></param>
-        private static void HandleRequestExceptionAsync(HttpContext httpContext, CustomHttpResquestException customHttpResquestException)
+        /// <param name="statusCode"></param>
+        private static void HandleRequestExceptionAsync(HttpContext httpContext, HttpStatusCode statusCode)
         {
-            if (customHttpResquestException.StatusCode == HttpStatusCode.Unauthorized)
+            if (statusCode == HttpStatusCode.Unauthorized)
             {
                 httpContext.Response.Redirect($"/login?ReturnUrl={httpContext.Request.Path}");
                 return;
             }
 
-            httpContext.Response.StatusCode = (int)customHttpResquestException.StatusCode;
+            httpContext.Response.StatusCode = (int)statusCode;
         }
     }
 }
