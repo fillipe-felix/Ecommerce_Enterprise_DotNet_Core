@@ -1,6 +1,8 @@
-﻿using EE.WebApp.MVC.Extensions;
+﻿using System.Globalization;
+using EE.WebApp.MVC.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -38,6 +40,16 @@ namespace EE.WebApp.MVC.Configuration
             app.UseRouting();
             
             app.UseIdentityConfiguration();
+
+            //cultas que minhas aplicação supporta
+            var supportedCultures = new[] { new CultureInfo("pt-BR") };
+            //minha cultura padrão é pt-BR e as outras são as qu minha lista de cultas suporta
+            app.UseRequestLocalization(new RequestLocalizationOptions()
+            {
+                DefaultRequestCulture = new RequestCulture("pt-BR"),
+                SupportedCultures = supportedCultures,
+                SupportedUICultures = supportedCultures
+            });
 
             //Faz com que todos os erros fiquem centralizados dentro do meu middleware, sem a necessidade de ficar colocando try-catch
             app.UseMiddleware<ExceptionMiddleware>();
