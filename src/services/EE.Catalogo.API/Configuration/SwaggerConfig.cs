@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
@@ -16,6 +19,10 @@ namespace EE.Catalogo.API.Configuration
                     Title = "EE.Catalogo.API", 
                     Version = "v1"
                 });
+                
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
                 
                 //adiciona as configurações para que o swagger possa realizar autenticação nos endpoints
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
