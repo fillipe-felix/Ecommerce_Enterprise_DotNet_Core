@@ -2,6 +2,7 @@
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Polly.CircuitBreaker;
 using Refit;
 
 namespace EE.WebApp.MVC.Extensions
@@ -37,6 +38,10 @@ namespace EE.WebApp.MVC.Extensions
             {
                 HandleRequestExceptionAsync(httpContext, ex.StatusCode);
             }
+            catch (BrokenCircuitException)
+            {
+                HandleCircuitBreakerExceptionAsync(httpContext);
+            }
         }
 
         /// <summary>
@@ -53,6 +58,15 @@ namespace EE.WebApp.MVC.Extensions
             }
 
             httpContext.Response.StatusCode = (int)statusCode;
+        }
+
+        /// <summary>
+        /// Redireciona o usuario para uma pagina de sistema temporariamente indisponivel
+        /// </summary>
+        /// <param name="context"></param>
+        public static void HandleCircuitBreakerExceptionAsync(HttpContext context)
+        {
+            context.Response.Redirect("/sistema-indisponivel");
         }
     }
 }
