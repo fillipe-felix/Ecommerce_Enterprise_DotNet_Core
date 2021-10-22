@@ -3,6 +3,7 @@
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <UserSecretsId>de0a2b78-2e16-4555-bb71-3b30aeef012c</UserSecretsId>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -10,17 +11,25 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.11" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="5.0.11" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.11">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.11" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.11" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
     </ItemGroup>
 
     <ItemGroup>
       <Folder Include="Application" />
-      <Folder Include="Configuration" />
-      <Folder Include="Data" />
+      <Folder Include="Controllers" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\building blocks\EE.Core\EE.Core.csproj" />
+      <ProjectReference Include="..\..\building blocks\EE.WebApi.Core\EE.WebApi.Core.csproj" />
     </ItemGroup>
 
 </Project>
