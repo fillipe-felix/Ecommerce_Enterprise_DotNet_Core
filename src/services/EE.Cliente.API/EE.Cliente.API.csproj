@@ -13,4 +13,14 @@
         <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Application" />
+      <Folder Include="Configuration" />
+      <Folder Include="Data" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\building blocks\EE.Core\EE.Core.csproj" />
+    </ItemGroup>
+
 </Project>
