@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EE.Cliente.API.Configuration;
 using EE.WebApi.Core.Identidade;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -41,6 +42,8 @@ namespace EE.Cliente.API
             services.AddJwtConfiguration(Configuration);
             
             services.AddSwaggerConfiguration();
+
+            services.AddMediatR(typeof(Startup));
             
             services.RegisterServices();
         }

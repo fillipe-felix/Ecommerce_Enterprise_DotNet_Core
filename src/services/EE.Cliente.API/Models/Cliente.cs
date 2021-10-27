@@ -16,7 +16,7 @@ namespace EE.Cliente.API.Models
         /// <param name="email"></param>
         /// <param name="cpf"></param>
         /// <param name="excluido"></param>
-        public Cliente(Guid id, string nome, string email, string cpf, bool excluido)
+        public Cliente(Guid id, string nome, string email, string cpf)
         {
             Id = id;
             Nome = nome;
