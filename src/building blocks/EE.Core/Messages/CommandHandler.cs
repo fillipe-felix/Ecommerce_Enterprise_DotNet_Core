@@ -1,4 +1,6 @@
-﻿using FluentValidation.Results;
+﻿using System.Threading.Tasks;
+using EE.Core.Data;
+using FluentValidation.Results;
 
 namespace EE.Core.Messages
 {
@@ -27,6 +29,21 @@ namespace EE.Core.Messages
         protected void AdicionarErro(string mensagem)
         {
             ValidationResult.Errors.Add(new ValidationFailure(string.Empty, mensagem));
+        }
+
+        /// <summary>
+        /// Método para persistir os dados no banco de dados
+        /// </summary>
+        /// <param name="unitOfWork"></param>
+        /// <returns></returns>
+        protected async Task<ValidationResult> PersistirDados(IUnitOfWork unitOfWork)
+        {
+            if (!await unitOfWork.Commit())
+            {
+                AdicionarErro("Houve um erro ao persistir os dados");
+            }
+            
+            return ValidationResult;
         }
     }
 }

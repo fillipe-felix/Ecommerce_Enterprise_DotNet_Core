@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using EE.Cliente.API.Models;
 using EE.Core.Messages;
 using FluentValidation.Results;
 using MediatR;
@@ -11,6 +12,18 @@ namespace EE.Cliente.API.Application.Commands
     /// </summary>
     public class ClienteCommandHandler : CommandHandler, IRequestHandler<RegistrarClienteCommand, ValidationResult>
     {
+
+        private readonly IClienteRepository _clienteRepository;
+
+        /// <summary>
+        /// Construtor ClienteCommandHandler
+        /// </summary>
+        /// <param name="clienteRepository"></param>
+        public ClienteCommandHandler(IClienteRepository clienteRepository)
+        {
+            _clienteRepository = clienteRepository;
+        }
+
         public async Task<ValidationResult> Handle(RegistrarClienteCommand message, CancellationToken cancellationToken)
         {
             if (!message.IsValido())
@@ -21,15 +34,18 @@ namespace EE.Cliente.API.Application.Commands
             var cliente = new Models.Cliente(message.Id, message.Nome, message.Email, message.Cpf);
             
             //validações de negocio
+            var clienteExistente = await _clienteRepository.ObterPorCpf(cliente.Cpf.Numero);
             
             //persistir no banco!
-            if (true) // ja existe o cliente com o CPF informado
+            if (clienteExistente != null) // ja existe o cliente com o CPF informado
             {
                 AdicionarErro("Este CPF já está em uso.");
                 return ValidationResult;
             }
+
+            _clienteRepository.Adicionar(cliente);
             
-            return message.ValidationResult;
+            return await PersistirDados(_clienteRepository.UnitOfWork);
         }
     }
 }
