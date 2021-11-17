@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using EE.Cliente.API.Application.Events;
 using EE.Cliente.API.Models;
 using EE.Core.Messages;
 using FluentValidation.Results;
@@ -44,6 +45,8 @@ namespace EE.Cliente.API.Application.Commands
             }
 
             _clienteRepository.Adicionar(cliente);
+            
+            cliente.AdicionarEvento(new ClienteRegistradoEvent(message.Id, message.Nome, message.Email, message.Cpf));
             
             return await PersistirDados(_clienteRepository.UnitOfWork);
         }
