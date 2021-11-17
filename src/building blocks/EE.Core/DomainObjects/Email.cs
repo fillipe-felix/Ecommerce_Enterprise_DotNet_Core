@@ -33,7 +33,7 @@ namespace EE.Core.DomainObjects
         /// </summary>
         /// <param name="email"></param>
         /// <returns></returns>
-        private static bool Validar(string email)
+        public static bool Validar(string email)
         {
             var regexEmail =
                 new Regex(

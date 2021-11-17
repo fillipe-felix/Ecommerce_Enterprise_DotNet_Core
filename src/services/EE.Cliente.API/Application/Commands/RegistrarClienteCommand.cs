@@ -1,5 +1,6 @@
 ﻿using System;
 using EE.Core.Messages;
+using FluentValidation;
 
 namespace EE.Cliente.API.Application.Commands
 {
@@ -42,6 +43,64 @@ namespace EE.Cliente.API.Application.Commands
             Nome = nome;
             Email = email;
             Cpf = cpf;
+        }
+
+        /// <summary>
+        /// Valida os dados do cliente
+        /// </summary>
+        /// <returns></returns>
+        public override bool IsValido()
+        {
+            ValidationResult = new RegistrarClientevalidation().Validate(this);
+            return ValidationResult.IsValid;
+        }
+    }
+
+    /// <summary>
+    /// Class RegistrarClientevalidation
+    /// </summary>
+    public class RegistrarClientevalidation : AbstractValidator<RegistrarClienteCommand>
+    {
+        /// <summary>
+        /// Constructor RegistrarClientevalidation
+        /// </summary>
+        public RegistrarClientevalidation()
+        {
+            RuleFor(c => c.Id)
+                .NotEqual(Guid.Empty)
+                .WithMessage("Id cliente inválido");
+            
+            RuleFor(c => c.Nome)
+                .NotEmpty()
+                .WithMessage("O nome do cliente não foi informado");
+
+            RuleFor(c => c.Cpf)
+                .Must(TerCpfValido)
+                .WithMessage("O CPF informado não é válido");
+
+            RuleFor(c => c.Email)
+                .Must(TerEmailValido)
+                .WithMessage("O e-mail informado não é válido");
+        }
+
+        /// <summary>
+        /// Valida se tem CPF valido
+        /// </summary>
+        /// <param name="cpf"></param>
+        /// <returns></returns>
+        protected static bool TerCpfValido(string cpf)
+        {
+            return Core.DomainObjects.Cpf.Validar(cpf);
+        }
+
+        /// <summary>
+        /// Valida se tem Email valido
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        protected static bool TerEmailValido(string email)
+        {
+            return Core.DomainObjects.Email.Validar(email);
         }
     }
 }
